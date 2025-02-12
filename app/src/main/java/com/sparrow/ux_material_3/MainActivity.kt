@@ -4,11 +4,13 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -19,6 +21,9 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.CheckCircle
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material.icons.outlined.Lock
 import androidx.compose.material.icons.outlined.Search
@@ -29,7 +34,9 @@ import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
@@ -42,6 +49,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.state.ToggleableState
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
@@ -72,64 +81,6 @@ data class ToggleableInfo(
     val isChecked: Boolean, val text: String
 )
 
-@Composable
-fun Checkboxes() {
-    val checkboxes = remember {
-        mutableStateListOf(
-            ToggleableInfo(
-                isChecked = false, text = "Photos"
-            ), ToggleableInfo(
-                isChecked = false, text = "Videos"
-            ), ToggleableInfo(
-                isChecked = false, text = "Audio"
-            )
-        )
-    }
-
-    var triState by remember {
-        mutableStateOf(ToggleableState.Indeterminate)
-    }
-
-    val toggleTriState = {
-        triState = when (triState) {
-            ToggleableState.Indeterminate -> ToggleableState.On
-            ToggleableState.On -> ToggleableState.Off
-            else -> ToggleableState.On
-        }
-        checkboxes.indices.forEach { index ->
-            checkboxes[index] = checkboxes[index].copy(
-                isChecked = triState == ToggleableState.On
-            )
-        }
-
-    }
-
-    Row(
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        TriStateCheckbox(state = triState, onClick = {
-            toggleTriState()
-        })
-        Text("File Types")
-    }
-
-    Column {
-        checkboxes.forEachIndexed { index, info ->
-
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Checkbox(checked = info.isChecked, onCheckedChange = { isChecked ->
-                    checkboxes[index] = info.copy(
-                        isChecked = isChecked
-                    )
-                    triState = ToggleableState.Indeterminate
-                })
-                Text(info.text)
-            }
-
-        }
-    }
-}
-
 
 @Composable
 fun App() {
@@ -150,14 +101,58 @@ fun App() {
         Spacer(Modifier.height(64.dp))
 
 
+        // Switches
+        Text(
+            "Switches", fontSize = 28.sp, fontWeight = FontWeight.ExtraLight
+        )
+
+        var isChecked by remember { mutableStateOf(false) }
+
+
+        Row(
+            Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Text("Dark Mode")
+            Switch(
+                checked = isChecked,
+                onCheckedChange = {
+                    isChecked = !isChecked
+                },
+                thumbContent = {
+                    Icon(
+                        imageVector = if (isChecked) {
+                            Icons.Default.Check
+                        } else {
+                            Icons.Default.Close
+                        },
+                        contentDescription = null
+                    )
+                }
+            )
+
+
+        }
+
+
         // Selection UI Components
 
         Text(
-            "Selection UI Components", fontSize = 28.sp, fontWeight = FontWeight.ExtraLight
+            "Checkboxes", fontSize = 28.sp, fontWeight = FontWeight.ExtraLight
         )
-        Spacer(Modifier.height(32.dp))
 
         Checkboxes()        // Composable defined separately
+
+        Spacer(Modifier.height(32.dp))
+
+        Text(
+            "Radio Buttons", fontSize = 28.sp, fontWeight = FontWeight.ExtraLight
+        )
+        RadioButtons()
+        Spacer(Modifier.height(32.dp))
 
 
         // Buttons
@@ -261,7 +256,108 @@ fun App() {
         )
         Spacer(Modifier.height(16.dp))
 
+        // Switches
+        Spacer(Modifier.height(16.dp))
+
 
     }
 
+
+}
+
+@Composable
+fun Checkboxes() {
+    val checkboxes = remember {
+        mutableStateListOf(
+            ToggleableInfo(
+                isChecked = false, text = "Photos"
+            ), ToggleableInfo(
+                isChecked = false, text = "Videos"
+            ), ToggleableInfo(
+                isChecked = false, text = "Audio"
+            )
+        )
+    }
+
+    var triState by remember {
+        mutableStateOf(ToggleableState.Indeterminate)
+    }
+
+    val toggleTriState = {
+        triState = when (triState) {
+            ToggleableState.Indeterminate -> ToggleableState.On
+            ToggleableState.On -> ToggleableState.Off
+            else -> ToggleableState.On
+        }
+        checkboxes.indices.forEach { index ->
+            checkboxes[index] = checkboxes[index].copy(
+                isChecked = triState == ToggleableState.On
+            )
+        }
+
+    }
+
+    Row(
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        TriStateCheckbox(state = triState, onClick = {
+            toggleTriState()
+        })
+        Text("File Types")
+    }
+
+    Column {
+        checkboxes.forEachIndexed { index, info ->
+
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Checkbox(checked = info.isChecked, onCheckedChange = { isChecked ->
+                    checkboxes[index] = info.copy(
+                        isChecked = isChecked
+                    )
+                    triState = ToggleableState.Indeterminate
+                })
+                Text(info.text)
+            }
+
+        }
+    }
+}
+
+@Composable
+fun RadioButtons() {
+    val radioButtons = remember {
+        mutableStateListOf(
+            ToggleableInfo(
+                isChecked = true, text = "Photos"
+            ), ToggleableInfo(
+                isChecked = false, text = "Videos"
+            ), ToggleableInfo(
+                isChecked = false, text = "Audio"
+            )
+        )
+    }
+
+    Column {
+        radioButtons.forEachIndexed { index, info ->
+
+            Row(verticalAlignment = Alignment.CenterVertically) {
+
+
+                RadioButton(
+                    selected = info.isChecked,
+                    onClick = {
+                        radioButtons.replaceAll {
+                            it.copy(
+                                isChecked = it.text == info.text
+                            )
+                        }
+                    })
+
+
+                Text(info.text)
+
+            }
+
+        }
+    }
 }
