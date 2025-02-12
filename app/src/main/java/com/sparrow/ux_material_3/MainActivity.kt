@@ -85,7 +85,6 @@ data class ToggleableInfo(
 @Composable
 fun App() {
     val scrollState = rememberScrollState()         // Initialize a scroll state value
-    var isError by remember { mutableStateOf(false) }
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -98,166 +97,17 @@ fun App() {
         Text(
             "UX Material 3 Design", fontSize = 32.sp, fontWeight = FontWeight.ExtraLight
         )
-        Spacer(Modifier.height(64.dp))
-
-
-        // Switches
-        Text(
-            "Switches", fontSize = 28.sp, fontWeight = FontWeight.ExtraLight
-        )
-
-        var isChecked by remember { mutableStateOf(false) }
-
-
-        Row(
-            Modifier
-                .fillMaxWidth()
-                .padding(16.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            Text("Dark Mode")
-            Switch(
-                checked = isChecked,
-                onCheckedChange = {
-                    isChecked = !isChecked
-                },
-                thumbContent = {
-                    Icon(
-                        imageVector = if (isChecked) {
-                            Icons.Default.Check
-                        } else {
-                            Icons.Default.Close
-                        },
-                        contentDescription = null
-                    )
-                }
-            )
-
-
-        }
-
-
-        // Selection UI Components
-
-        Text(
-            "Checkboxes", fontSize = 28.sp, fontWeight = FontWeight.ExtraLight
-        )
-
-        Checkboxes()        // Composable defined separately
 
         Spacer(Modifier.height(32.dp))
 
-        Text(
-            "Radio Buttons", fontSize = 28.sp, fontWeight = FontWeight.ExtraLight
-        )
+
+
+
+        Checkboxes()
         RadioButtons()
-        Spacer(Modifier.height(32.dp))
-
-
-        // Buttons
-
-        Spacer(Modifier.height(32.dp))
-        Text(
-            "Buttons", fontSize = 28.sp, fontWeight = FontWeight.ExtraLight
-        )
-
-        Spacer(Modifier.height(16.dp))
-
-
-
-        Button(onClick = {}) {
-            Text("Subscribe")
-        }
-
-        ElevatedButton(onClick = {}) {
-            Icon(
-                imageVector = Icons.Outlined.Add,
-                contentDescription = "",
-                modifier = Modifier.size(18.dp)
-            )
-            Spacer(Modifier.width(8.dp))
-            Text("Add")
-
-        }
-
-        FilledTonalButton(onClick = {}) {
-            Text("Open in Browser")
-        }
-
-
-        OutlinedButton(onClick = {
-            isError = !isError
-        }) {
-            Text("Toggle Error")
-        }
-
-        TextButton(onClick = {}) {
-            Text("Learn More")
-        }
-        Spacer(Modifier.height(32.dp))
-
-
-        // Text Fields
-
-        Text(
-            "Text Fields", fontSize = 28.sp, fontWeight = FontWeight.ExtraLight
-        )
-        Spacer(Modifier.height(16.dp))
-
-        var filledText by remember {
-            mutableStateOf("")
-        }
-
-
-        TextField(value = filledText, onValueChange = { filledText = it }, label = {
-            Text("Label")
-        }, placeholder = {
-            Text("Placeholder")
-        }, leadingIcon = {
-            Icon(
-                imageVector = Icons.Outlined.Search, contentDescription = null
-            )
-        }, trailingIcon = {
-            Icon(
-                imageVector = Icons.Outlined.Lock, contentDescription = null
-            )
-        }, prefix = {
-            Text("$ ")
-        }, suffix = {
-            Text(" kg")
-        }, supportingText = {
-            Text("*required")
-        }, isError = isError
-
-        )
-
-        Spacer(Modifier.height(16.dp))
-        var password by remember { mutableStateOf("") }
-        TextField(value = password, onValueChange = { password = it }, placeholder = {
-            Text("Password")
-        }, visualTransformation = PasswordVisualTransformation(), singleLine = true
-        )
-
-        Spacer(Modifier.height(16.dp))
-        var num by remember { mutableStateOf("") }
-        TextField(
-            value = num,
-            onValueChange = { num = it },
-            placeholder = {
-                Text("Enter a number")
-            },
-            keyboardOptions = KeyboardOptions(
-                keyboardType = KeyboardType.Number, imeAction = ImeAction.Next
-            ),
-            keyboardActions = KeyboardActions(onNext = {
-                println("hello world")
-            }),
-        )
-        Spacer(Modifier.height(16.dp))
-
-        // Switches
-        Spacer(Modifier.height(16.dp))
+        Buttons()
+        Switches()
+        TextFields()
 
 
     }
@@ -296,6 +146,10 @@ fun Checkboxes() {
         }
 
     }
+    Text(
+        "Checkboxes", fontSize = 28.sp, fontWeight = FontWeight.ExtraLight
+    )
+
 
     Row(
         verticalAlignment = Alignment.CenterVertically
@@ -321,6 +175,7 @@ fun Checkboxes() {
 
         }
     }
+    Spacer(Modifier.height(32.dp))
 }
 
 @Composable
@@ -338,6 +193,13 @@ fun RadioButtons() {
     }
 
     Column {
+
+        Text(
+            "Radio Buttons", fontSize = 28.sp, fontWeight = FontWeight.ExtraLight
+        )
+
+
+
         radioButtons.forEachIndexed { index, info ->
 
             Row(verticalAlignment = Alignment.CenterVertically) {
@@ -359,5 +221,148 @@ fun RadioButtons() {
             }
 
         }
+        Spacer(Modifier.height(32.dp))
     }
+}
+
+@Composable
+fun Switches() {
+    // Switches
+    Text(
+        "Switches", fontSize = 28.sp, fontWeight = FontWeight.ExtraLight
+    )
+
+    var isChecked by remember { mutableStateOf(false) }
+
+
+    Row(
+        Modifier
+            .fillMaxWidth()
+            .padding(16.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        Text("Dark Mode")
+        Switch(
+            checked = isChecked,
+            onCheckedChange = {
+                isChecked = !isChecked
+            },
+            thumbContent = {
+                Icon(
+                    imageVector = if (isChecked) {
+                        Icons.Default.Check
+                    } else {
+                        Icons.Default.Close
+                    },
+                    contentDescription = null
+                )
+            }
+        )
+
+
+    }
+    Spacer(Modifier.height(32.dp))
+}
+
+@Composable
+fun TextFields() {
+    // Text Fields
+
+    Text(
+        "Text Fields", fontSize = 28.sp, fontWeight = FontWeight.ExtraLight
+    )
+
+
+    var filledText by remember {
+        mutableStateOf("")
+    }
+
+
+    TextField(value = filledText, onValueChange = { filledText = it }, label = {
+        Text("Label")
+    }, placeholder = {
+        Text("Placeholder")
+    }, leadingIcon = {
+        Icon(
+            imageVector = Icons.Outlined.Search, contentDescription = null
+        )
+    }, trailingIcon = {
+        Icon(
+            imageVector = Icons.Outlined.Lock, contentDescription = null
+        )
+    }, prefix = {
+        Text("$ ")
+    }, suffix = {
+        Text(" kg")
+    }, supportingText = {
+        Text("*required")
+    }, isError = false
+
+    )
+
+    Spacer(Modifier.height(16.dp))
+    var password by remember { mutableStateOf("") }
+    TextField(value = password, onValueChange = { password = it }, placeholder = {
+        Text("Password")
+    }, visualTransformation = PasswordVisualTransformation(), singleLine = true
+    )
+
+    Spacer(Modifier.height(16.dp))
+    var num by remember { mutableStateOf("") }
+    TextField(
+        value = num,
+        onValueChange = { num = it },
+        placeholder = {
+            Text("Enter a number")
+        },
+        keyboardOptions = KeyboardOptions(
+            keyboardType = KeyboardType.Number, imeAction = ImeAction.Next
+        ),
+        keyboardActions = KeyboardActions(onNext = {
+            println("hello world")
+        }),
+    )
+    Spacer(Modifier.height(32.dp))
+
+}
+
+@Composable()
+fun Buttons() {
+    Text(
+        "Buttons", fontSize = 28.sp, fontWeight = FontWeight.ExtraLight
+    )
+
+    Spacer(Modifier.height(16.dp))
+
+
+
+    Button(onClick = {}) {
+        Text("Subscribe")
+    }
+
+    ElevatedButton(onClick = {}) {
+        Icon(
+            imageVector = Icons.Outlined.Add,
+            contentDescription = "",
+            modifier = Modifier.size(18.dp)
+        )
+        Spacer(Modifier.width(8.dp))
+        Text("Add")
+
+    }
+
+    FilledTonalButton(onClick = {}) {
+        Text("Open in Browser")
+    }
+
+
+    OutlinedButton(onClick = {}) {
+        Text("Toggle Error")
+    }
+
+    TextButton(onClick = {}) {
+        Text("Learn More")
+    }
+    Spacer(Modifier.height(32.dp))
 }
